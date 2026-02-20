@@ -1,4 +1,5 @@
 import { Stack } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {useFonts} from "expo-font";
 import {
   Inter_400Regular,
@@ -19,5 +20,9 @@ export default function RootLayout() {
   if(!fontsLoaded){
     return null;
   }
-  return <Stack />;
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <Stack />
+    </SafeAreaView>
+  );
 }

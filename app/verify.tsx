@@ -1,38 +1,67 @@
 import { View, Text,StyleSheet, TextInput,TouchableOpacity, Alert } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { Stack, useRouter } from 'expo-router'
 
 
 
 export default function login(){
+  
+  const[opt,setOtp] = useState("");
+  const [error,setError] = useState("");
 
-const router = useRouter();
-const handleSubmit = () =>{
-  Alert.alert("OTP Verified")
-}
+
+  const handleVerify = () =>{
+    if(opt.length < 6){
+      setError("OTP must be 6 digits")
+      return;
+    }
+    setError("");
+    Alert.alert("OTP verification successful")
+    }
+
+
+
 
   return (
   <>
     <Stack.Screen options={{headerShown:false}}/>
       <View style={styles.container}>
-        <Text style={styles.welcometext}>
+        <Text style={styles.enterotp}>
            Enter OTP
         </Text>
-        <Text style={styles.signtext}>
+        <Text style={styles.text}>
           Verify OTP
         </Text>
-        <TextInput placeholder='Enter OTP'
-               style={styles.name}>
-        </TextInput>    
+        <TextInput
+            placeholder='Enter OTP'
+            style={[
+            styles.otpsection,
+            error ? styles.inputError : null
+            ]}
+            value={opt}
+            onChangeText={(text) => {
+            const cleaned = text.replace(/[^0-9]/g, "");
+            if (cleaned.length <= 6) {
+            setOtp(cleaned);
+             }
+            setError("");
+             }}
+           keyboardType="number-pad"
+           maxLength={6}
+       />
+          {error ? (
+          <Text style={styles.errorText}>{error}</Text>
+          ) : null}
+    
           <TouchableOpacity 
-                style={styles.submitbtn} 
-                onPress={handleSubmit}>
-            <Text style={styles.submittxt}>
+                style={styles.verifybtn}
+                onPress={handleVerify} >
+            <Text style={styles.verifytxt}>
                 Verify
             </Text>
           </TouchableOpacity>
-      </View>
-  </>
+    </View>
+</>
   )
 }
 
@@ -45,20 +74,20 @@ const styles = StyleSheet.create({
     paddingTop: 70,
   },
 
-  welcometext: {
+  enterotp: {
     color: "#3a3a3b",
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight:"900",
     marginBottom: 5,
   },
 
-  signtext: {
+  text: {
     color: "#3a3b3c",
     fontSize: 14,
     marginBottom: 25,
   },
 
-  name: {
+  otpsection: {
     height: 50,
     width: "100%",
     borderWidth: 2,
@@ -68,7 +97,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  submitbtn: {
+  verifybtn: {
     backgroundColor: "#037EB2",
     width: "100%",
     paddingVertical: 14,
@@ -77,10 +106,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 
-  submittxt: {
+  verifytxt: {
     color: "white",
-    fontWeight: "bold",
     fontSize: 16,
   },
+  inputError:{
+    borderColor:"#ff4d4f",
+    backgroundColor:"#fff1f0"
+  },
+  errorText:{
+    color:"#ff4d4f",
+    fontSize:12,
+    marginTop:15,
+    marginBottom:15,
+    textAlign:"center"
+  }
 });
 

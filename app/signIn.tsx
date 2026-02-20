@@ -2,7 +2,7 @@ import { View, Text,StyleSheet, TextInput,TouchableOpacity, Linking, KeyboardAvo
 import React from 'react'
 import { Stack } from 'expo-router'
 import { useState } from "react";
-import { Router,useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { Dropdown } from "react-native-element-dropdown";
 
 export default function signIn () {
@@ -178,8 +178,8 @@ const styles = StyleSheet.create({
 
   text1: {
     fontSize: 30,
+    fontWeight:"700",
     color: "#3a3a3b",
-    fontWeight: "900",
     marginBottom: 10,
   },
 
@@ -204,7 +204,6 @@ const styles = StyleSheet.create({
     borderColor:"#e5e7eb",
     borderRadius:8,
     paddingHorizontal:15,
-    marginBottom:10,
     marginTop:20,
   },
 
@@ -214,12 +213,11 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
-    marginTop: 25,
+    marginTop: 20,
   },
 
   submittxt: {
     color: "white",
-    fontWeight: "bold",
     fontSize: 16,
   },
   inputError:{
@@ -241,11 +239,9 @@ const styles = StyleSheet.create({
 
   termstext: {
     color: "#037EB2",
-    fontWeight: "600",
   },
 
   privacytext: {
     color: "#037EB2",
-    fontWeight: "600",
   },
 });

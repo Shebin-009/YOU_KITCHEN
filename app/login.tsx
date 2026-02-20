@@ -75,7 +75,8 @@ const styles = StyleSheet.create({
   welcometext: {
     color: "#3a3a3b",
     fontSize: 30,
-    fontWeight: "bold",
+    fontFamily:"inter_700Bold",
+    fontWeight:"900",
     marginBottom: 5,
   },
 
@@ -112,7 +113,6 @@ const styles = StyleSheet.create({
   },
   submittxt: {
     color: "white",
-    fontWeight: "bold",
     fontSize: 16,
   },
 });

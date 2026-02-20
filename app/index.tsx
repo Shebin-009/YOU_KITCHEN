@@ -7,9 +7,6 @@ import { Stack, useRouter } from "expo-router";
 export default function Index() {
     const router = useRouter();
 
-
-  
-
   return (
 
 <>
@@ -102,7 +99,6 @@ const styles = StyleSheet.create({
 
   buttontext: {
     color: "white",
-    fontWeight: "bold",
     fontSize: 16,
   },
 
@@ -119,7 +115,6 @@ const styles = StyleSheet.create({
 
   buttontext2: {
     color: "#037EB2",
-    fontWeight: "bold",
     fontSize: 16,
   },
 
