@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 110,
+    width: 105,
     height: 120,
     marginBottom: 5,
   },
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
 
   button1: {
     backgroundColor: "#037EB2",
-    width: "100%",
+    width:295,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
 
   button2: {
     backgroundColor: "white",
-    width: "100%",
+    width:295,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
