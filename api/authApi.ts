@@ -1,4 +1,4 @@
-import { api } from "./axiosInstance";
+import { api } from "./axiosInstances";
 
 
 export const signupUser = async (
@@ -32,4 +32,3 @@ export const logoutUser = async () => {
 export const getCurrentUser = async () => {
   return api.get("/auth/me");
 };
-

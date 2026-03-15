@@ -4,6 +4,7 @@ import { Stack } from 'expo-router'
 import { useState } from "react";
 import { useRouter } from 'expo-router';
 import { Dropdown } from "react-native-element-dropdown";
+import { validateEmail } from '@/lib/utils/emailValidate';
 
 export default function signIn () {
       const router = useRouter();
@@ -14,7 +15,7 @@ const termsAndServices = () =>{
 } 
 
 const privacyAndPolicy = () =>{
-  Linking.openURL("https://policies.google.com/privacy?hl=en-US")
+  Linking.openURL("https://policies.google.com/privacy?hl=en-US") 
 }
 
 
@@ -32,7 +33,6 @@ const privacyAndPolicy = () =>{
     {label:"Friend", value:"friend"}
   ];
 
-  const validateEmail = (email:string) =>{ return /\S+@\S+\.\S+/.test(email); };
 
   const handleSubmit = () => {
   let newErrors: any = {};

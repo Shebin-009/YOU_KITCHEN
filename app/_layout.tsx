@@ -8,7 +8,7 @@ import {
   Inter_900Black,
 } from "@expo-google-fonts/inter";
 
-import { getToken } from "@/src/api/utils/tokenStorage";
+import { getToken } from "@/lib/utils/tokenStorage";
 
 export default function RootLayout() {
 
@@ -26,7 +26,7 @@ export default function RootLayout() {
 
         if (token) {
           console.log("Token found:", token);
-          router.replace("/dashboard");
+          router.replace("/");
         } else {
           console.log("No token found");
           router.replace("/");

@@ -2,9 +2,10 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react'
 import { Stack, useRouter } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons';
-import { loginUser } from '@/src/api/authApi';
-import { saveToken } from '@/src/api/utils/tokenStorage';
-import { storeUser } from '@/src/api/utils/useStorage';
+import { loginUser } from '@/api/authApi';
+import { saveToken } from '@/lib/utils/tokenStorage';
+import { storeUser } from '@/lib/utils/useStorage';
+import {validateEmail} from "@/lib/utils/emailValidate"
 
 export default function Login() {
 
@@ -16,10 +17,6 @@ export default function Login() {
   const [apiError,setApiError] = useState("");
 
   const router = useRouter();
-
-  const validateEmail = (email: string) => {
-    return /\S+@\S+\.\S+/.test(email);
-  };
 
   const handleSubmit = async () => {
   let newErrors: any = {};
@@ -53,7 +50,7 @@ export default function Login() {
     console.log("Token Stored:", token);
     console.log("User Stored:", user);
 
-    router.replace("/(tabs)/dashboard");
+    router.replace("/(tabs)/home");
 
   } catch (error: any) {
     setApiError("Invalid credentials. Please check Email or Password");
@@ -61,7 +58,6 @@ export default function Login() {
     setLoading(false);
   }
 };
-
 
   return (
 <>
@@ -157,12 +153,11 @@ const styles = StyleSheet.create({
   paddingHorizontal: 15,
   height: 50,
   marginTop: 18,
-},
+  },
 
-passwordInput: {
-  flex: 1,
-},
-
+  passwordInput: {
+    flex: 1,
+  },
 
   inputError:{
     borderColor:"#ff4d4f",
@@ -175,7 +170,7 @@ passwordInput: {
   right: 15,
   top: "50%",
   transform: [{ translateY: -10 }],
-},
+  },
 
   submitbtn: {
     backgroundColor: "#037EB2",

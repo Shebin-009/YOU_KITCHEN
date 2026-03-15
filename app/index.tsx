@@ -29,7 +29,7 @@ export default function Index() {
 
       < TouchableOpacity style={styles.button1}>
         <Text style={styles.buttontext} 
-        onPress={() => router.push("/signIn")} >
+        onPress={() => router.push("/signUp")} >
           Create an account
         </Text>
        </TouchableOpacity>
