@@ -10,19 +10,29 @@ const [status,setStatus] = useState("");
 const [modalVisible,setModalVisible] = useState(false);
 const [note,setNote] = useState("");
 const [file,setFile] = useState<any>(null);
+const [failMessage,setFailMessage] = useState("");
+const [isSubmitted, setIsSubmitted] = useState(false);
+
+
 
 const toggleStatus = (value:string)=>{
 
     if(status === value){
         setStatus("");
-            return;
+        setFailMessage("");
+        setIsSubmitted(false);
+        return;
     }
+
     setStatus(value);
+    setFailMessage("");
+    setIsSubmitted(false);
 
     if(value === "fail"){
         setModalVisible(true);
     }
 };
+
 
     const pickFile = async ()=>{
 
@@ -34,11 +44,20 @@ const toggleStatus = (value:string)=>{
      setFile(result.assets[0]);
     }
 };
-    const handleSubmit = ()=>{
-        setModalVisible(false);
-        setNote("");
-        setFile(null);    
-    };
+   const handleSubmit = ()=>{
+
+    const message = note.trim() 
+        ? note 
+        : `${task} is not working`;
+
+    setFailMessage(message);
+    setIsSubmitted(true);
+
+    setModalVisible(false);
+    setNote("");
+    setFile(null);
+};
+
 return (
 
 <View style={styles.card}>
@@ -66,6 +85,13 @@ return (
     <Text style={styles.center}>N/A</Text>
     </TouchableOpacity>
 </View>
+    {status === "fail" && isSubmitted && (
+    <Text style={styles.errorText}>
+        {failMessage}
+    </Text>
+)}
+
+
     
     <Modal
         visible={modalVisible}
@@ -218,6 +244,13 @@ submitBtn:{
 submitText:{
     color:"#fff",
     fontWeight:"600"
-}
+},
+errorText:{
+    color:"#ff4d4f",
+    marginTop:8,
+    fontSize:13,
+    fontWeight:"500"
+},
+
 
 });

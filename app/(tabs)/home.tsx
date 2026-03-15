@@ -15,25 +15,14 @@ const loadUser = async ()=>{
 
 const user = await getUser();
 
-if(user?.name){
-
-const names = user.name.split(" ");
-
-const first = names[0]?.charAt(0) || "";
-const second = names[1]?.charAt(0) || "";
-
-setInitials((first + second).toUpperCase());
-
-}
-
-};
-
-loadUser();
-
+  if(user?.name){
+    const names = user.name.split(" ");
+    const first = names[0]?.charAt(0) || "";
+    const second = names[1]?.charAt(0) || "";
+    setInitials((first + second).toUpperCase());
+}};
+  loadUser();
 },[])
-
-
-
   const renderItem = ({ item }: any) => (
   <TouchableOpacity
     style={styles.card}
