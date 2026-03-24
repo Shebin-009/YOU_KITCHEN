@@ -1,4 +1,6 @@
 import { getToken } from "@/lib/utils/tokenStorage";
+import { Ionicons } from "@expo/vector-icons";
+
 import {
   Inter_100Thin,
   Inter_400Regular,
@@ -16,6 +18,7 @@ export default function RootLayout() {
     Inter_700Bold,
     Inter_100Thin,
     Inter_900Black,
+    ...Ionicons.font,
   });
 
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +31,6 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (isLoading) return;
-
     const inAuthGroup = segments[0] === "(auth)";
     const inTabsGroup = segments[0] === "(tabs)";
 
@@ -42,7 +44,6 @@ export default function RootLayout() {
     if (isLoggedIn && !inTabsGroup) {
       router.replace("/(tabs)/home");
     } else if (!isLoggedIn && !inAuthGroup) {
-      console.log(" No token - Redirecting to login");
       router.replace("/(auth)/login");
     }
   }, [isLoggedIn, isLoading, segments]);

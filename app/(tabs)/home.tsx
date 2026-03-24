@@ -1,69 +1,65 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
-import {routines} from "@/constants/routines";
-import { useRouter,router } from "expo-router";
-import { useState,useEffect } from "react";
+import RoutineCard from "@/api/component/RoutineCards";
+import { routines } from "@/constants/routines";
 import { getUser } from "@/lib/utils/useStorage";
-
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 export default function home() {
+  const [initials, setInitials] = useState("");
 
-const [initials,setInitials] = useState("");
+  useEffect(() => {
+    const loadUser = async () => {
+      const user = await getUser();
 
-useEffect(()=>{
-
-const loadUser = async ()=>{
-
-const user = await getUser();
-
-  if(user?.name){
-    const names = user.name.split(" ");
-    const first = names[0]?.charAt(0) || "";
-    const second = names[1]?.charAt(0) || "";
-    setInitials((first + second).toUpperCase());
-}};
-  loadUser();
-},[])
+      if (user?.name) {
+        const names = user.name.split(" ");
+        const first = names[0]?.charAt(0) || "";
+        const second = names[1]?.charAt(0) || "";
+        setInitials((first + second).toUpperCase());
+      }
+    };
+    loadUser();
+  }, []);
   const renderItem = ({ item }: any) => (
-  <TouchableOpacity
-    style={styles.card}
-    onPress={() => router.push({
-      pathname:'/(tabs)/routine/[name]',
-      params:{name:item.route}
-    })}
-  >
-    <Text style={styles.cardTitle}>{item.title}</Text>
-
-    <View
-      style={[
-        styles.status,
-        item.status === "Completed" ? styles.completed : styles.pending,
-      ]}
-    >
-      <Text
-        style={
-          item.status === "Completed"
-            ? styles.completedText
-            : styles.pendingText
-        }
-      >
-        {item.status}
-      </Text>
-    </View>
-  </TouchableOpacity>
-);
-
+    <RoutineCard
+      title={item.title}
+      status={item.status}
+      route={item.route}
+      onPress={() =>
+        router.push({
+          pathname: "/(tabs)/routine/[name]",
+          params: { name: item.route },
+        })
+      }
+    />
+  );
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Routines</Text>
+        <View>
+          <Text style={styles.username}>Routines</Text>
+        </View>
 
         <View style={styles.profileCircle}>
-        <Text style={styles.profileText}>
-          {initials}
-  </Text>
-</View>
+          <Text style={styles.profileText}>{initials}</Text>
+        </View>
+      </View>
 
+      <View style={styles.statsContainer}>
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>4</Text>
+          <Text style={styles.statLabel}>Completed</Text>
+        </View>
+
+        <View style={styles.statBox}>
+          <Text style={styles.statNumber}>6</Text>
+          <Text style={styles.statLabel}>Pending</Text>
+        </View>
+      </View>
+      <View style={styles.troutine}>
+        <Text style={styles.sectionTitle}>Today's Schedule</Text>
       </View>
       <FlatList
         data={routines}
@@ -71,7 +67,7 @@ const user = await getUser();
         renderItem={renderItem}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
       />
     </View>
   );
@@ -80,80 +76,85 @@ const user = await getUser();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F6F6F6",
-    paddingHorizontal: 16,
-    paddingTop: 45,
+    backgroundColor: "#F1F5F9",
+    paddingHorizontal: 18,
+    paddingTop: 55,
   },
 
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 13,
+    marginBottom: 25,
   },
 
-  title: {
+  username: {
     fontSize: 30,
-    fontWeight: "bold",
+    fontWeight: "700",
+    color: "#0F172A",
+    marginTop: 2,
   },
 
-  profileCircle:{
-  width:40,
-  height:40,
-  borderRadius:20,
-  backgroundColor:"#0A7EA4",
-  justifyContent:"center",
-  alignItems:"center"
-},
+  profileCircle: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: "#0EA5E9",
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 4,
+  },
 
-profileText:{
-  color:"#fff",
-  fontWeight:"bold",
-  fontSize:16
-},
+  profileText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 16,
+  },
 
-  card: {
-    backgroundColor: "white",
-    width:183,
-    height:105,
+  statsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 20,
+  },
+
+  statBox: {
+    backgroundColor: "#ecebeb",
+    width: "48%",
     padding: 16,
-    borderRadius:12,
-    marginBottom: 10,
-    marginLeft:5
+    borderRadius: 14,
+
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
   },
 
-  cardTitle: {
-    fontWeight: "900",
-    marginBottom: 1,
-    fontSize:20,
-    marginLeft:20,
-    marginTop:1
+  statNumber: {
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#000000",
   },
 
-  status: {
-    alignSelf: "flex-start",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    marginTop:5
+  statLabel: {
+    fontSize: 13,
+    color: "#64748B",
+    marginTop: 4,
+  },
+  troutine: {
+    backgroundColor: "#ed9450",
+    height: 33,
+    width: 150,
+    color: "#ffffff",
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
   },
 
-  completed: {
-    backgroundColor: "#c7e9cf",
-  },
-
-  pending: {
-    backgroundColor: "#FFE5CC",
-  },
-
-  completedText: {
-    color: "green",
-    fontSize: 12,
-  },
-
-  pendingText: {
-    color: "#FF7A00",
-    fontSize: 12,
-
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#000000",
+    marginBottom: 5,
   },
 });
