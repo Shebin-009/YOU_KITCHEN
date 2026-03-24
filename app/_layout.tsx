@@ -40,7 +40,6 @@ export default function RootLayout() {
     });
 
     if (isLoggedIn && !inTabsGroup) {
-      console.log("✅ Token found - Auto redirecting to home");
       router.replace("/(tabs)/home");
     } else if (!isLoggedIn && !inAuthGroup) {
       console.log(" No token - Redirecting to login");
