@@ -1,7 +1,5 @@
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialIcons } from '@expo/vector-icons';
-
 
 export default function TabsLayout() {
   return (
@@ -14,7 +12,6 @@ export default function TabsLayout() {
         tabBarInactiveTintColor: "gray",
       }}
     >
-
       <Tabs.Screen
         name="home"
         options={{
@@ -56,7 +53,6 @@ export default function TabsLayout() {
           href: null,
         }}
       />
-
     </Tabs>
   );
 }

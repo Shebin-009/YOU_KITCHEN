@@ -1,126 +1,125 @@
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
-import { Stack, useRouter } from 'expo-router'
-import { Ionicons } from '@expo/vector-icons';
-import { loginUser } from '@/api/authApi';
-import { saveToken } from '@/lib/utils/tokenStorage';
-import { storeUser } from '@/lib/utils/useStorage';
-import {validateEmail} from "@/lib/utils/emailValidate"
+import { loginUser } from "@/api/authApi";
+import { validateEmail } from "@/lib/utils/emailValidate";
+import { saveToken } from "@/lib/utils/tokenStorage";
+import { storeUser } from "@/lib/utils/useStorage";
+import { Ionicons } from "@expo/vector-icons";
+import { Stack, useRouter } from "expo-router";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Login() {
-
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");   
-  const [showPassword, setShowPassword] = useState(false); 
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<any>({});
   const [loading, setLoading] = useState(false);
-  const [apiError,setApiError] = useState("");
+  const [apiError, setApiError] = useState("");
 
   const router = useRouter();
 
   const handleSubmit = async () => {
-  let newErrors: any = {};
+    let newErrors: any = {};
 
-  if (!email.trim()) {
-    newErrors.email = "Email is required";
-  } else if (!validateEmail(email)) {
-    newErrors.email = "Enter a valid email";
-  }
+    if (!email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(email)) {
+      newErrors.email = "Enter a valid email";
+    }
 
-  if (!password.trim()) {
-    newErrors.password = "Password is required";
-  }
+    if (!password.trim()) {
+      newErrors.password = "Password is required";
+    }
 
-  setErrors(newErrors);
+    setErrors(newErrors);
 
-  if (Object.keys(newErrors).length !== 0) return;
+    if (Object.keys(newErrors).length !== 0) return;
 
-  try {
-    setLoading(true);
-    setApiError("");
+    try {
+      setLoading(true);
+      setApiError("");
 
-    const response = await loginUser(email, password);
+      const response = await loginUser(email, password);
 
-    const token = String(response.data.token);
-    const user = response.data.user;
+      const token = String(response.data.token);
+      const user = response.data.user;
 
-    await saveToken(token);
-    await storeUser(user);
+      await saveToken(token);
+      await storeUser(user);
 
-    console.log("Token Stored:", token);
-    console.log("User Stored:", user);
+      console.log("Token Stored:", token);
+      console.log("User Stored:", user);
 
-    router.replace("/(tabs)/home");
-
-  } catch (error: any) {
-    setApiError("Invalid credentials. Please check Email or Password");
-  } finally {
-    setLoading(false);
-  }
-};
+      router.replace("/(tabs)/home");
+    } catch (error: any) {
+      setApiError("Invalid credentials. Please check Email or Password");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-<>
-    <Stack.Screen options={{ headerShown: false }} /> 
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
-        <Text style={styles.welcometext}>
-          Welcome back..!
-        </Text>
-        <Text style={styles.signtext}>
-          Sign in to continue
-        </Text>
-        {apiError ? (
-          <Text style={styles.errorText}>{apiError}</Text>
-        ): null}
+        <Text style={styles.welcometext}>Welcome back..!</Text>
+        <Text style={styles.signtext}>Sign in to continue</Text>
+        {apiError ? <Text style={styles.errorText}>{apiError}</Text> : null}
 
         <TextInput
-            placeholder='Email'
-            keyboardType='email-address'
-            style={[styles.passwordContainer, errors.email && styles.inputError]}
-            value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-              setErrors({...errors, email: "" });
-            }}
+          placeholder="Email"
+          keyboardType="email-address"
+          style={[styles.passwordContainer, errors.email && styles.inputError]}
+          value={email}
+          onChangeText={(text) => {
+            setEmail(text);
+            setErrors({ ...errors, email: "" });
+          }}
         />
-        {errors.email && (
-          <Text style={styles.errorText}>{errors.email}</Text>
-        )}
+        {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
-        <View style={[styles.passwordContainer, errors.password && styles.inputError]}>
+        <View
+          style={[
+            styles.passwordContainer,
+            errors.password && styles.inputError,
+          ]}
+        >
           <TextInput
-            placeholder='Password'
+            placeholder="Password"
             secureTextEntry={!showPassword}
             style={styles.passwordInput}
             value={password}
             onChangeText={(text) => {
-            setPassword(text);
-            setErrors({ ...errors, password: "" });
-          }}
-        />
-
-        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <Ionicons
-            name={showPassword ? "eye-off" : "eye"}
-            size={20}
-            color="#c7cacf"
+              setPassword(text);
+              setErrors({ ...errors, password: "" });
+            }}
           />
-        </TouchableOpacity>
-      </View>
+
+          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+            <Ionicons
+              name={showPassword ? "eye-off" : "eye"}
+              size={20}
+              color="#c7cacf"
+            />
+          </TouchableOpacity>
+        </View>
         {errors.password && (
           <Text style={styles.errorText}>{errors.password}</Text>
         )}
 
-        <TouchableOpacity
-            style={styles.submitbtn}
-            onPress={handleSubmit}>
+        <TouchableOpacity style={styles.submitbtn} onPress={handleSubmit}>
           <Text style={styles.submittxt}>
             {loading ? "Signing in..." : "Submit"}
           </Text>
         </TouchableOpacity>
       </View>
-</>
-  )
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -133,8 +132,8 @@ const styles = StyleSheet.create({
   welcometext: {
     color: "#3a3a3b",
     fontSize: 30,
-    fontFamily:"inter_700Bold",
-    fontWeight:"900",
+    fontFamily: "inter_700Bold",
+    fontWeight: "900",
     marginBottom: 5,
   },
 
@@ -144,32 +143,32 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 
- passwordContainer: {
-  flexDirection: "row",
-  alignItems: "center",
-  borderWidth: 2,
-  borderColor: "#E5E7EB",
-  borderRadius: 8,
-  paddingHorizontal: 15,
-  height: 50,
-  marginTop: 18,
+  passwordContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#E5E7EB",
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    height: 50,
+    marginTop: 18,
   },
 
   passwordInput: {
     flex: 1,
   },
 
-  inputError:{
-    borderColor:"#ff4d4f",
-    backgroundColor:"#fff1f0",
-    marginTop:1
+  inputError: {
+    borderColor: "#ff4d4f",
+    backgroundColor: "#fff1f0",
+    marginTop: 1,
   },
 
   eyeIcon: {
-  position: "absolute",
-  right: 15,
-  top: "50%",
-  transform: [{ translateY: -10 }],
+    position: "absolute",
+    right: 15,
+    top: "50%",
+    transform: [{ translateY: -10 }],
   },
 
   submitbtn: {
@@ -178,13 +177,13 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
-    marginTop:20
+    marginTop: 20,
   },
 
-  errorText:{
-    color:"#ff4d4f",
-    fontSize:12,
-    marginBottom:10,
+  errorText: {
+    color: "#ff4d4f",
+    fontSize: 12,
+    marginBottom: 10,
   },
 
   submittxt: {

@@ -1,71 +1,56 @@
-import { View, Text,StyleSheet, TextInput,TouchableOpacity, Alert } from 'react-native'
-import React, { useState } from 'react'
-import { Stack, useRouter } from 'expo-router'
+import { Stack } from "expo-router";
+import React, { useState } from "react";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
+export default function login() {
+  const [opt, setOtp] = useState("");
+  const [error, setError] = useState("");
 
-
-export default function login(){
-  
-  const[opt,setOtp] = useState("");
-  const [error,setError] = useState("");
-
-
-  const handleVerify = () =>{
-    if(opt.length < 6){
-      setError("OTP must be 6 digits")
+  const handleVerify = () => {
+    if (opt.length < 6) {
+      setError("OTP must be 6 digits");
       return;
     }
     setError("");
-    Alert.alert("OTP verification successful")
-    }
-
-
-
+    Alert.alert("OTP verification successful");
+  };
 
   return (
-  <>
-    <Stack.Screen options={{headerShown:false}}/>
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
       <View style={styles.container}>
-        <Text style={styles.enterotp}>
-           Enter OTP
-        </Text>
-        <Text style={styles.text}>
-          Verify OTP
-        </Text>
+        <Text style={styles.enterotp}>Enter OTP</Text>
+        <Text style={styles.text}>Verify OTP</Text>
         <TextInput
-            placeholder='Enter OTP'
-            style={[
-            styles.otpsection,
-            error ? styles.inputError : null
-            ]}
-            value={opt}
-            onChangeText={(text) => {
+          placeholder="Enter OTP"
+          style={[styles.otpsection, error ? styles.inputError : null]}
+          value={opt}
+          onChangeText={(text) => {
             const cleaned = text.replace(/[^0-9]/g, "");
             if (cleaned.length <= 6) {
-            setOtp(cleaned);
-             }
+              setOtp(cleaned);
+            }
             setError("");
-             }}
-           keyboardType="number-pad"
-           maxLength={6}
-       />
-          {error ? (
-          <Text style={styles.errorText}>{error}</Text>
-          ) : null}
-    
-          <TouchableOpacity 
-                style={styles.verifybtn}
-                onPress={handleVerify} >
-            <Text style={styles.verifytxt}>
-                Verify
-            </Text>
-          </TouchableOpacity>
-    </View>
-</>
-  )
+          }}
+          keyboardType="number-pad"
+          maxLength={6}
+        />
+        {error ? <Text style={styles.errorText}>{error}</Text> : null}
+
+        <TouchableOpacity style={styles.verifybtn} onPress={handleVerify}>
+          <Text style={styles.verifytxt}>Verify</Text>
+        </TouchableOpacity>
+      </View>
+    </>
+  );
 }
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -77,7 +62,7 @@ const styles = StyleSheet.create({
   enterotp: {
     color: "#3a3a3b",
     fontSize: 30,
-    fontWeight:"900",
+    fontWeight: "900",
     marginBottom: 5,
   },
 
@@ -110,16 +95,15 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
   },
-  inputError:{
-    borderColor:"#ff4d4f",
-    backgroundColor:"#fff1f0"
+  inputError: {
+    borderColor: "#ff4d4f",
+    backgroundColor: "#fff1f0",
   },
-  errorText:{
-    color:"#ff4d4f",
-    fontSize:12,
-    marginTop:15,
-    marginBottom:15,
-    textAlign:"center"
-  }
+  errorText: {
+    color: "#ff4d4f",
+    fontSize: 12,
+    marginTop: 15,
+    marginBottom: 15,
+    textAlign: "center",
+  },
 });
-
