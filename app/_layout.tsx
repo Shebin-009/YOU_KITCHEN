@@ -1,12 +1,11 @@
 import { getToken } from "@/lib/utils/tokenStorage";
-import { Ionicons } from "@expo/vector-icons";
-
 import {
   Inter_100Thin,
   Inter_400Regular,
   Inter_700Bold,
   Inter_900Black,
 } from "@expo-google-fonts/inter";
+import { Ionicons } from "@expo/vector-icons";
 import { useFonts } from "expo-font";
 import { Stack, router, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
@@ -22,48 +21,34 @@ export default function RootLayout() {
   });
 
   const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
   const segments = useSegments();
+
+  const checkAuth = async () => {
+    const token = await getToken();
+    setIsLoggedIn(!!token);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [segments]);
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || isLoggedIn === null) return;
+
     const inAuthGroup = segments[0] === "(auth)";
     const inTabsGroup = segments[0] === "(tabs)";
 
-    console.log("Navigation check:", {
-      isLoggedIn,
-      inAuthGroup,
-      inTabsGroup,
-      currentSegment: segments[0],
-    });
-
     if (isLoggedIn && !inTabsGroup) {
       router.replace("/(tabs)/home");
-    } else if (!isLoggedIn && !inAuthGroup) {
-      router.replace("/(auth)/login");
+    } else if (!isLoggedIn && !inAuthGroup && segments.length > 0) {
+      router.replace("/");
     }
   }, [isLoggedIn, isLoading, segments]);
 
-  const checkAuth = async () => {
-    try {
-      const token = await getToken();
-      setIsLoggedIn(!!token);
-    } catch (error) {
-      console.log("Auth error:", error);
-      setIsLoggedIn(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (!fontsLoaded) {
-    return null;
-  }
-  if (isLoading) {
+  if (!fontsLoaded || isLoading) {
     return (
       <View
         style={{

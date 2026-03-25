@@ -34,6 +34,8 @@ export default function Login() {
 
     if (!password.trim()) {
       newErrors.password = "Password is required";
+    } else if (password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -46,18 +48,26 @@ export default function Login() {
 
       const response = await loginUser(email, password);
 
-      const token = String(response.data.token);
-      const user = response.data.user;
+      const token = String(response.data?.token);
+      const user = response.data?.user;
+
+      if (!token) {
+        throw new Error("Token missing in response");
+      }
 
       await saveToken(token);
       await storeUser(user);
 
-      console.log("Token Stored:", token);
-      console.log("User Stored:", user);
-
+      console.log("Login Success");
       router.replace("/(tabs)/home");
     } catch (error: any) {
-      setApiError("Invalid credentials. Please check Email or Password");
+      console.log("Login error:", error);
+
+      setApiError(
+        error?.response?.data?.message ||
+          error.message ||
+          "Something went wrong",
+      );
     } finally {
       setLoading(false);
     }
@@ -132,7 +142,7 @@ const styles = StyleSheet.create({
   welcometext: {
     color: "#3a3a3b",
     fontSize: 30,
-    fontFamily: "inter_700Bold",
+    fontFamily: "Inter_700Bold",
     fontWeight: "900",
     marginBottom: 5,
   },

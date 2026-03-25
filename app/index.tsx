@@ -1,51 +1,47 @@
-import { StatusBar, Text, 
-  View ,Image,StyleSheet, 
-  TextComponent, 
-  TouchableOpacity} from "react-native";
 import { Stack, useRouter } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Index() {
-    const router = useRouter();
+  const router = useRouter();
 
   return (
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <View style={styles.container}>
+        <View style={styles.content}>
+          <Image
+            source={require("../assets/images/Vector.png")}
+            resizeMode="contain"
+            style={styles.image}
+          />
 
-<>
-  <Stack.Screen options={{headerShown:false}}/>
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Image 
-        source={require("../assets/images/Vector.png")} 
-        resizeMode="contain"
-        style={styles.image}/>
+          <Text style={styles.title}>
+            <Text style={styles.blueText}>YOU</Text>
+            <Text style={styles.blackText}>KITCHEN</Text>
+          </Text>
 
-        <Text style={styles.title}>
-          <Text style={styles.blueText}>YOU</Text>
-          <Text style={styles.blackText}>KITCHEN</Text>
-        </Text>
+          <Text style={styles.subtitle}>Food Saftey, Smart Analytics</Text>
 
-        <Text style={styles.subtitle}>
-            Food Saftey, Smart Analytics
-        </Text>
+          <TouchableOpacity style={styles.button1}>
+            <Text
+              style={styles.buttontext}
+              onPress={() => router.push("/signUp")}
+            >
+              Create an account
+            </Text>
+          </TouchableOpacity>
 
-      < TouchableOpacity style={styles.button1}>
-        <Text style={styles.buttontext} 
-        onPress={() => router.push("/signUp")} >
-          Create an account
-        </Text>
-       </TouchableOpacity>
-
-       <TouchableOpacity style={styles.button2}
-       onPress={() => router.push("/login")}>
-        <Text style={styles.buttontext2}>
-          Sign in
-        </Text>
-      </TouchableOpacity>
-      </View>     
-    </View>
-</>
+          <TouchableOpacity
+            style={styles.button2}
+            onPress={() => router.push("/login")}
+          >
+            <Text style={styles.buttontext2}>Sign in</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
   );
 }
-
 
 const styles = StyleSheet.create({
   container: {
@@ -69,7 +65,7 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 42,
-    fontFamily:"Inter_900Black"
+    fontFamily: "Inter_900Black",
   },
 
   blueText: {
@@ -90,7 +86,7 @@ const styles = StyleSheet.create({
 
   button1: {
     backgroundColor: "#037EB2",
-    width:295,
+    width: 295,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
@@ -104,7 +100,7 @@ const styles = StyleSheet.create({
 
   button2: {
     backgroundColor: "white",
-    width:295,
+    width: 295,
     paddingVertical: 14,
     borderRadius: 8,
     alignItems: "center",
@@ -117,6 +113,4 @@ const styles = StyleSheet.create({
     color: "#037EB2",
     fontSize: 16,
   },
-
 });
-

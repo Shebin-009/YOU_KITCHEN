@@ -69,7 +69,7 @@ export default function signIn() {
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
-      router.push("/verify");
+      router.replace("/verify");
     }
   };
 
