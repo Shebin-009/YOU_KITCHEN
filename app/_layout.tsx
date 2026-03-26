@@ -23,17 +23,14 @@ export default function RootLayout() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const segments = useSegments();
 
-  // ✅ Run only once
   useEffect(() => {
     const checkAuth = async () => {
       const token = await getToken();
       setIsLoggedIn(!!token);
     };
-
     checkAuth();
   }, []);
 
-  // ✅ Handle navigation after auth ready
   useEffect(() => {
     if (isLoggedIn === null) return;
 
@@ -47,7 +44,6 @@ export default function RootLayout() {
     }
   }, [isLoggedIn]);
 
-  // ✅ Prevent flicker
   if (!fontsLoaded || isLoggedIn === null) {
     return (
       <View

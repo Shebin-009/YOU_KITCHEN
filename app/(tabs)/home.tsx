@@ -76,37 +76,42 @@ export default function home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F1F5F9",
-    paddingHorizontal: 18,
-    paddingTop: 55,
+    backgroundColor: "#F8FAFC",
+    paddingHorizontal: 20,
+    paddingTop: 60,
   },
 
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 25,
+    marginBottom: 28,
   },
 
   username: {
-    fontSize: 30,
+    fontSize: 28,
     fontWeight: "700",
     color: "#0F172A",
-    marginTop: 2,
+    letterSpacing: -0.5,
   },
 
   profileCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: "#0EA5E9",
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    backgroundColor: "#037EB2",
     justifyContent: "center",
     alignItems: "center",
-    elevation: 4,
+
+    shadowColor: "#0284C7",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 6,
   },
 
   profileText: {
-    color: "#fff",
+    color: "#FFFFFF",
     fontWeight: "700",
     fontSize: 16,
   },
@@ -114,47 +119,54 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 20,
+    marginBottom: 26,
   },
 
   statBox: {
-    backgroundColor: "#ecebeb",
-    width: "48%",
-    padding: 16,
-    borderRadius: 14,
+    flex: 1,
+    marginHorizontal: 4,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 18,
+    paddingVertical: 20,
+    paddingHorizontal: 16,
 
+    // subtle gradient feel (clean white with border)
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+
+    // shadow (premium card feel)
     shadowColor: "#000",
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 5,
   },
 
   statNumber: {
-    fontSize: 22,
-    fontWeight: "700",
-    color: "#000000",
+    fontSize: 26,
+    fontWeight: "800",
+    color: "#0F172A",
   },
 
   statLabel: {
     fontSize: 13,
     color: "#64748B",
-    marginTop: 4,
+    marginTop: 6,
+    fontWeight: "500",
   },
+
   troutine: {
-    backgroundColor: "#ed9450",
-    height: 33,
-    width: 150,
-    color: "#ffffff",
+    alignSelf: "flex-start",
+    backgroundColor: "#E0F2FE",
+    paddingHorizontal: 14,
+    paddingVertical: 6,
     borderRadius: 20,
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 8,
+    marginBottom: 12,
   },
 
   sectionTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "600",
-    color: "#000000",
-    marginBottom: 5,
+    color: "#0284C7",
   },
 });

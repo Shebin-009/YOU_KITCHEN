@@ -8,6 +8,7 @@ type Props = {
   route: string;
   onPress: () => void;
 };
+
 const getIcon = (title: string) => {
   const t = title.toLowerCase().trim();
 
@@ -23,11 +24,43 @@ const getIcon = (title: string) => {
   return "grid-outline";
 };
 
+const getIconColor = (status: string) => {
+  switch (status) {
+    case "completed":
+      return "#22C55E";
+    case "pending":
+      return "#F97316";
+    default:
+      return "#0284C7";
+  }
+};
+
+const getIconBg = (status: string) => {
+  switch (status) {
+    case "completed":
+      return "#DCFCE7";
+    case "pending":
+      return "#FFEDD5";
+    default:
+      return "#E0F2FE";
+  }
+};
+
 export default function RoutineCard({ title, status, route, onPress }: Props) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.row}>
-        <Ionicons name={getIcon(title) as any} size={28} color="#0EA5E9" />
+        {/* ✅ UPDATED ICON UI */}
+        <View
+          style={[styles.iconContainer, { backgroundColor: getIconBg(status) }]}
+        >
+          <Ionicons
+            name={getIcon(title) as any}
+            size={20}
+            color={getIconColor(status)}
+          />
+        </View>
+
         <Text style={styles.cardTitle}>{title}</Text>
       </View>
     </TouchableOpacity>
@@ -41,7 +74,11 @@ const styles = StyleSheet.create({
     height: 130,
     padding: 16,
     borderRadius: 16,
-    marginBottom: 10,
+    marginBottom: 12,
+
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+
     shadowColor: "#000",
     shadowOpacity: 0.08,
     shadowRadius: 10,
@@ -49,17 +86,25 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
 
-  cardTitle: {
-    fontWeight: "700",
-    fontSize: 20,
-    color: "#1E293B",
-    flexShrink: 1,
-  },
-
   row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 12,
+  },
+
+  iconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  cardTitle: {
+    fontWeight: "700",
+    fontSize: 18,
+    color: "#1E293B",
+    flexShrink: 1,
   },
 
   status: {
@@ -68,17 +113,21 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 20,
   },
+
   completed: {
     backgroundColor: "#DCFCE7",
   },
+
   pending: {
     backgroundColor: "#FEF3C7",
   },
+
   completedText: {
     color: "#16A34A",
     fontSize: 12,
     fontWeight: "600",
   },
+
   pendingText: {
     color: "#F97316",
     fontSize: 12,

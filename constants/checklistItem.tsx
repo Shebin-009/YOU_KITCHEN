@@ -1,256 +1,275 @@
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput } from "react-native";
+import {
+    Modal,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from "react-native";
 
-import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
+import React, { useState } from "react";
 
 export default function ChecklistItem({ task }: any) {
+  const [status, setStatus] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [note, setNote] = useState("");
+  const [file, setFile] = useState<any>(null);
+  const [failMessage, setFailMessage] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-const [status,setStatus] = useState("");
-const [modalVisible,setModalVisible] = useState(false);
-const [note,setNote] = useState("");
-const [file,setFile] = useState<any>(null);
-const [failMessage,setFailMessage] = useState("");
-const [isSubmitted, setIsSubmitted] = useState(false);
-
-
-
-const toggleStatus = (value:string)=>{
-
-    if(status === value){
-        setStatus("");
-        setFailMessage("");
-        setIsSubmitted(false);
-        return;
+  const toggleStatus = (value: string) => {
+    if (status === value) {
+      setStatus("");
+      setFailMessage("");
+      setIsSubmitted(false);
+      return;
     }
-
     setStatus(value);
     setFailMessage("");
     setIsSubmitted(false);
 
-    if(value === "fail"){
-        setModalVisible(true);
+    if (value === "fail") {
+      setModalVisible(true);
     }
-};
+  };
 
-
-    const pickFile = async ()=>{
-
+  const pickFile = async () => {
     const result = await DocumentPicker.getDocumentAsync({
-        type:"image/*"
+      type: "image/*",
     });
 
-    if(!result.canceled){
-     setFile(result.assets[0]);
+    if (!result.canceled) {
+      setFile(result.assets[0]);
     }
-};
-   const handleSubmit = ()=>{
+  };
 
-    const message = note.trim() 
-        ? note 
-        : `${task} is not working`;
-
+  const handleSubmit = () => {
+    const message = note.trim() ? note : `${task} is not working`;
     setFailMessage(message);
     setIsSubmitted(true);
-
     setModalVisible(false);
     setNote("");
     setFile(null);
-};
+  };
 
-return (
-
-<View style={styles.card}>
-<Text style={styles.task}>{task}</Text>
-<View style={styles.buttons}>
-
-<TouchableOpacity
-    style={[styles.btn,status==="pass" && styles.pass]}
-    onPress={()=>toggleStatus("pass")}
->
-    <Text style={styles.center}>Pass</Text>
-    </TouchableOpacity>
-
+  return (
+    <View style={styles.card}>
+      <Text style={styles.task}>{task}</Text>
+      <View style={styles.buttons}>
         <TouchableOpacity
-            style={[styles.btn,status==="fail" && styles.fail]}
-            onPress={()=>toggleStatus("fail")}
->
-        <Text style={styles.center}>Fail</Text>
+          style={[styles.btn, status === "pass" && styles.pass]}
+          onPress={() => toggleStatus("pass")}
+        >
+          <Text style={styles.center}>Pass</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.btn, status === "fail" && styles.fail]}
+          onPress={() => toggleStatus("fail")}
+        >
+          <Text style={styles.center}>Fail</Text>
         </TouchableOpacity>
 
-    <TouchableOpacity
-        style={[styles.btn,status==="na" && styles.na]}
-        onPress={()=>toggleStatus("na")}
->
-    <Text style={styles.center}>N/A</Text>
-    </TouchableOpacity>
-</View>
-    {status === "fail" && isSubmitted && (
-    <Text style={styles.errorText}>
-        {failMessage}
-    </Text>
-)}
+        <TouchableOpacity
+          style={[styles.btn, status === "na" && styles.na]}
+          onPress={() => toggleStatus("na")}
+        >
+          <Text style={styles.center}>N/A</Text>
+        </TouchableOpacity>
+      </View>
+      {status === "fail" && isSubmitted && (
+        <Text style={styles.errorText}>{failMessage}</Text>
+      )}
 
-
-    
-    <Modal
-        visible={modalVisible}
-        animationType="slide"
-        transparent={true}
-    >
+      <Modal visible={modalVisible} animationType="slide" transparent={true}>
         <View style={styles.overlay}>
-        <View style={styles.modalContainer}>
+          <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Note</Text>
+            <Text style={styles.taskLabel}>({task}):</Text>
 
-            <Text style={styles.taskLabel}>
-                ({task}):
-            </Text>
+            <TextInput
+              placeholder="Describe the issue and any actions taken"
+              multiline
+              style={styles.textArea}
+              value={note}
+              onChangeText={setNote}
+            />
 
-        <TextInput
-            placeholder="Describe the issue and any actions taken"
-            multiline
-            style={styles.textArea}
-            value={note}
-            onChangeText={setNote}
-        />
-
-            <TouchableOpacity
-            style={styles.attach}
-            onPress={pickFile}
-        >
-
-        <Ionicons name="attach" size={18} color="#444"/>
-            <Text style={styles.attachText}>
-                Attach Photo
-            </Text>
-
-        </TouchableOpacity>
-            {file && (
-                <Text style={styles.fileName}>
-                    {file.name}
-                </Text>
-                )}
-
-        <TouchableOpacity
-            style={styles.submitBtn}
-            onPress={handleSubmit}
-        >
-        <Text style={styles.submitText}>
-            Submit
-        </Text>
-
+            <TouchableOpacity style={styles.attach} onPress={pickFile}>
+              <Ionicons name="attach" size={18} color="#444" />
+              <Text style={styles.attachText}>Attach Photo</Text>
             </TouchableOpacity>
+            {file && <Text style={styles.fileName}>{file.name}</Text>}
+
+            <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+              <Text style={styles.submitText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+      </Modal>
     </View>
-</Modal>
-</View>
-)}
+  );
+}
 
 const styles = StyleSheet.create({
-card:{
-    backgroundColor:"#fff",
-    padding:15,
-    borderRadius:10,
-    marginBottom:15
-},
-task:{
-    fontSize:20,
-    fontWeight:"bold",
-    marginBottom:10
-},
-buttons:{
-    flexDirection:"row",
-    gap:35
-},
-btn:{
-    height:28,
-    width:67,
-    borderWidth:1,
-    borderColor:"#ccc",
-    borderRadius:20,
-    justifyContent:"center",
-    alignItems:"center"
-},
-center:{
-    fontSize:13
-},
-pass:{
-    backgroundColor:"#d7f5dd",
-    borderColor:"#3bb54a"
-},
-fail:{
-    backgroundColor:"#ffd6d6",
-    borderColor:"#ff4d4f"
-},
-na:{
-    backgroundColor:"#eee"
-},
-overlay:{
-    flex:1,
-    backgroundColor:"rgba(0,0,0,0.4)",
-    justifyContent:"center",
-    alignItems:"center"
-},
-modalContainer:{
-    width:"85%",
-    backgroundColor:"#fff",
-    borderRadius:12,
-    padding:20
-},
-modalTitle:{
-    fontSize:20,
-    fontWeight:"bold",
-    marginBottom:5
-},
-taskLabel:{
-    fontSize:14,
-    fontWeight:"bold",
-    color:"#black",
-    marginBottom:15
-},
-textArea:{
-    borderWidth:1,
-    borderColor:"#ccc",
-    borderRadius:8,
-    height:120,
-    padding:10,
-    textAlignVertical:"top"
-},
-attach:{
-    flexDirection:"row",
-    alignItems:"center",
-    height:24,
-    width:106,
-    borderRadius:12,
-    marginTop:15,
-    backgroundColor:"#ebebeb"
-},
-attachText:{
-    marginLeft:5,
-    color:"#444"
-},
-fileName:{
-    fontSize:12,
-    marginTop:5,
-    color:"#666"
-},
-submitBtn:{
-    backgroundColor:"#0A7EA4",
-    marginTop:20,
-    paddingVertical:10,
-    borderRadius:8,
-    alignItems:"center"
-},
-submitText:{
-    color:"#fff",
-    fontWeight:"600"
-},
-errorText:{
-    color:"#ff4d4f",
-    marginTop:8,
-    fontSize:13,
-    fontWeight:"500"
-},
+  card: {
+    backgroundColor: "#FFFFFF",
+    padding: 18,
+    borderRadius: 18,
+    marginBottom: 16,
 
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
 
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+
+  task: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginBottom: 14,
+  },
+
+  buttons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  btn: {
+    flex: 1,
+    marginHorizontal: 4,
+    height: 36,
+    borderRadius: 20,
+    justifyContent: "center",
+    alignItems: "center",
+
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    backgroundColor: "#F8FAFC",
+  },
+
+  center: {
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#475569",
+  },
+
+  pass: {
+    backgroundColor: "#DCFCE7",
+    borderColor: "#22C55E",
+  },
+
+  fail: {
+    backgroundColor: "#FEE2E2",
+    borderColor: "#EF4444",
+  },
+
+  na: {
+    backgroundColor: "#E2E8F0",
+    borderColor: "#CBD5F5",
+  },
+
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(15,23,42,0.5)",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  modalContainer: {
+    width: "88%",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 20,
+    padding: 22,
+
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.15,
+    shadowRadius: 20,
+    elevation: 8,
+  },
+
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: "700",
+    color: "#0F172A",
+    marginBottom: 6,
+  },
+
+  taskLabel: {
+    fontSize: 13,
+    fontWeight: "500",
+    color: "#64748B",
+    marginBottom: 14,
+  },
+
+  textArea: {
+    borderWidth: 1,
+    borderColor: "#E2E8F0",
+    borderRadius: 12,
+    height: 110,
+    padding: 12,
+    textAlignVertical: "top",
+    fontSize: 14,
+    backgroundColor: "#F8FAFC",
+  },
+
+  attach: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "flex-start",
+
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginTop: 14,
+
+    backgroundColor: "#F1F5F9",
+  },
+
+  attachText: {
+    marginLeft: 6,
+    color: "#334155",
+    fontSize: 13,
+    fontWeight: "500",
+  },
+
+  fileName: {
+    fontSize: 12,
+    marginTop: 6,
+    color: "#64748B",
+  },
+
+  submitBtn: {
+    backgroundColor: "#0284C7",
+    marginTop: 22,
+    paddingVertical: 12,
+    borderRadius: 12,
+    alignItems: "center",
+
+    shadowColor: "#0284C7",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+
+  submitText: {
+    color: "#FFFFFF",
+    fontWeight: "600",
+    fontSize: 15,
+  },
+
+  errorText: {
+    color: "#DC2626",
+    marginTop: 10,
+    fontSize: 13,
+    fontWeight: "500",
+  },
 });

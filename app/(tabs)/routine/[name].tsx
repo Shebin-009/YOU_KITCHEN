@@ -1,16 +1,15 @@
+import { checklists } from "@/constants/checkLists";
+import ChecklistItem from "@/constants/checklistItem";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
-
-import { checklists } from "@/constants/checkLists";
-import ChecklistItem from "@/constants/checklistItem";
 
 const formatTitle = (text: string) =>
   text.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase());
@@ -28,7 +27,7 @@ export default function ChecklistScreen() {
           style={styles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={18} color="#fff" />
+          <Ionicons name="arrow-back-outline" size={24} color="#000000" />
         </TouchableOpacity>
 
         <Text style={styles.title}>{formatTitle(String(name))} Checklist</Text>
@@ -59,9 +58,8 @@ const styles = StyleSheet.create({
   backButton: {
     width: 34,
     height: 34,
-    marginTop: 40,
+    marginTop: 45,
     borderRadius: 17,
-    backgroundColor: "#0A7EA4",
     justifyContent: "center",
     alignItems: "center",
   },
