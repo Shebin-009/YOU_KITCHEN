@@ -14,7 +14,7 @@ export const getUser = async () => {
     return user ? JSON.parse(user) : null;
   } catch (error) {
     console.log("Error getting user:", error);
-    return null; // ✅ IMPORTANT
+    return null;
   }
 };
 

@@ -20,35 +20,35 @@ export default function RootLayout() {
     ...Ionicons.font,
   });
 
-  const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
-
   const segments = useSegments();
 
-  const checkAuth = async () => {
-    const token = await getToken();
-    setIsLoggedIn(!!token);
-    setIsLoading(false);
-  };
-
+  // ✅ Run only once
   useEffect(() => {
+    const checkAuth = async () => {
+      const token = await getToken();
+      setIsLoggedIn(!!token);
+    };
+
     checkAuth();
-  }, [segments]);
+  }, []);
 
+  // ✅ Handle navigation after auth ready
   useEffect(() => {
-    if (isLoading || isLoggedIn === null) return;
+    if (isLoggedIn === null) return;
 
     const inAuthGroup = segments[0] === "(auth)";
     const inTabsGroup = segments[0] === "(tabs)";
 
     if (isLoggedIn && !inTabsGroup) {
       router.replace("/(tabs)/home");
-    } else if (!isLoggedIn && !inAuthGroup && segments.length > 0) {
+    } else if (!isLoggedIn && !inAuthGroup) {
       router.replace("/");
     }
-  }, [isLoggedIn, isLoading, segments]);
+  }, [isLoggedIn]);
 
-  if (!fontsLoaded || isLoading) {
+  // ✅ Prevent flicker
+  if (!fontsLoaded || isLoggedIn === null) {
     return (
       <View
         style={{

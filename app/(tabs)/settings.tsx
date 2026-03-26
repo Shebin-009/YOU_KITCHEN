@@ -40,7 +40,6 @@ export default function Settings() {
         <Text style={styles.title}>Settings</Text>
       </View>
 
-      {/* User Info Card */}
       <View style={styles.userCard}>
         <View style={styles.avatar}>
           <Text style={styles.avatarText}>
