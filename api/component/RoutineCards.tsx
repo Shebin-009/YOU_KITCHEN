@@ -12,11 +12,11 @@ type Props = {
 const getIcon = (title: string) => {
   const t = title.toLowerCase().trim();
 
-  if (t.includes("opening")) return "sunny-outline";
+  if (t.includes("opening")) return "checkmark-circle";
   if (t.includes("closing")) return "moon-outline";
   if (t.includes("cleaning")) return "sparkles-outline";
   if (t.includes("water")) return "water-outline";
-  if (t.includes("temps")) return "analytics-outline";
+  if (t.includes("temps")) return "thermometer-outline";
   if (t.includes("holding")) return "hourglass-outline";
   if (t.includes("health")) return "medkit-outline";
   if (t.includes("sign")) return "exit-outline";
@@ -24,44 +24,33 @@ const getIcon = (title: string) => {
   return "grid-outline";
 };
 
-const getIconColor = (status: string) => {
-  switch (status) {
-    case "completed":
-      return "#22C55E";
-    case "pending":
-      return "#F97316";
-    default:
-      return "#0284C7";
-  }
-};
+export default function RoutineCard({ title, status, onPress }: Props) {
+  const isCompleted = status === "completed";
 
-const getIconBg = (status: string) => {
-  switch (status) {
-    case "completed":
-      return "#DCFCE7";
-    case "pending":
-      return "#FFEDD5";
-    default:
-      return "#E0F2FE";
-  }
-};
-
-export default function RoutineCard({ title, status, route, onPress }: Props) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
       <View style={styles.row}>
-        {/* ✅ UPDATED ICON UI */}
-        <View
-          style={[styles.iconContainer, { backgroundColor: getIconBg(status) }]}
-        >
-          <Ionicons
-            name={getIcon(title) as any}
-            size={20}
-            color={getIconColor(status)}
-          />
-        </View>
-
+        <Ionicons
+          name={getIcon(title) as any}
+          size={28}
+          color={isCompleted ? "#16A34A" : "#00d4df"}
+        />
         <Text style={styles.cardTitle}>{title}</Text>
+      </View>
+      <View
+        style={[
+          styles.badge,
+          isCompleted ? styles.completedBadge : styles.pendingBadge,
+        ]}
+      >
+        <Text
+          style={[
+            styles.badgeText,
+            isCompleted ? styles.completedText : styles.pendingText,
+          ]}
+        >
+          {isCompleted ? "Completed" : "Pending"}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -72,65 +61,47 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     width: "48%",
     height: 130,
-    padding: 16,
-    borderRadius: 16,
+    padding: 14,
+    borderRadius: 18,
     marginBottom: 12,
-
-    borderWidth: 1,
-    borderColor: "#E2E8F0",
-
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 10,
-    elevation: 3,
     justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 3,
   },
-
   row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
+    gap: 8,
   },
-
-  iconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
   cardTitle: {
-    fontWeight: "700",
-    fontSize: 18,
-    color: "#1E293B",
+    fontWeight: "600",
+    fontSize: 16,
+    color: "#334155",
     flexShrink: 1,
   },
-
-  status: {
+  badge: {
     alignSelf: "flex-start",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
   },
-
-  completed: {
+  completedBadge: {
     backgroundColor: "#DCFCE7",
   },
-
-  pending: {
-    backgroundColor: "#FEF3C7",
+  pendingBadge: {
+    backgroundColor: "#FDE2E2",
   },
-
+  badgeText: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
   completedText: {
     color: "#16A34A",
-    fontSize: 12,
-    fontWeight: "600",
   },
-
   pendingText: {
-    color: "#F97316",
-    fontSize: 12,
-    fontWeight: "600",
+    color: "#DC2626",
   },
 });
